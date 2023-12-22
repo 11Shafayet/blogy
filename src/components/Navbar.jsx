@@ -1,38 +1,33 @@
-import { useState } from 'react';
 import logo from '/images/logo.png';
 import { FaSearch } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import useAuth from '../hooks/useAuth';
 
 const Navbar = () => {
-  const [activeTab, setActiveTab] = useState('home');
+  const { activeNav, setActiveNav } = useAuth();
 
   const navData = [
     {
       title: 'Home',
-      text: 'home',
+      text: '/home',
       link: '/',
     },
     {
-      title: 'Categories',
-      text: 'categories',
-      link: '/categories',
-    },
-    {
-      title: 'All Blog',
-      text: 'allblog',
-      link: '/allblog',
+      title: 'All Blogs',
+      text: '/allblogs',
+      link: '/allblogs',
     },
     {
       title: 'Featured',
-      text: 'featured',
-      link: '/allblog',
+      text: '/featured',
+      link: '/allblogs',
     },
     {
       title: 'Contact',
-      text: 'contact',
+      text: '/contact',
       link: '/contact',
     },
   ];
-
 
   return (
     <>
@@ -41,19 +36,18 @@ const Navbar = () => {
       </div>
 
       <div className="bg-primary text-white font-primary w-full">
-
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center">
             <ul className="flex text-sm font-semibold">
               {navData.map((item, i) => (
-                <li
-                  className={`uppercase hover:bg-black hover:bg-opacity-15 py-4 px-5 duration-500 cursor-pointer ${
-                    activeTab === item.text && 'bg-black bg-opacity-15'
-                  }`}
-                  key={i}
-                >
-                  {item.title}
-                </li>
+                <Link to={item.link} key={i}>
+                  <li
+                    className={`uppercase hover:bg-black hover:bg-opacity-15 py-4 px-5 duration-500 cursor-pointer`}
+                    onClick={() => setActiveNav(item.text)}
+                  >
+                    {item.title}
+                  </li>
+                </Link>
               ))}
             </ul>
             <div>

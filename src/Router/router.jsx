@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import MainLayout from '../MainLayout/MainLayout';
 
 import Home from '../pages/Home';
-import AllBlog from '../pages/AllBlog';
+import AllBlogs from '../pages/AllBlogs';
 import SingleBlog from '../pages/SingleBlog';
 import Contact from '../pages/Contact';
 
@@ -12,7 +12,7 @@ import Login from '../admin/pages/Login';
 import Register from '../admin/pages/Register';
 
 // blog routes
-import AllBlogs from '../admin/pages/AllBlogs';
+import AdminAllBlogs from '../admin/pages/AllBlogs';
 import AddBlog from '../admin/pages/AddBlog';
 import EditBlog from '../admin/pages/EditBlog';
 import UserDetails from '../admin/pages/UserDetails';
@@ -28,14 +28,12 @@ const router = createBrowserRouter([
       },
 
       {
-        path: '/allblog',
-        element: <AllBlog />,
+        path: '/allblogs',
+        element: <AllBlogs />,
       },
       {
         path: '/blog/:id',
         element: <SingleBlog />,
-        loader: ({ params }) =>
-          fetch(`https://check.vercel.app/api/v1/allblogs/${params.id}`),
       },
       {
         path: '/contact',
@@ -64,7 +62,7 @@ const router = createBrowserRouter([
       //blog routes
       {
         path: '/dashboard/all-blogs',
-        element: <AllBlogs />,
+        element: <AdminAllBlogs />,
       },
       {
         path: '/dashboard/add-blog',
@@ -74,9 +72,7 @@ const router = createBrowserRouter([
         path: '/dashboard/edit-blog/:id',
         element: <EditBlog />,
         loader: ({ params }) =>
-          fetch(
-            `https://saimums-backend.vercel.app/api/v1/allblogs/${params.id}`
-          ),
+          fetch(`http://localhost:11011/api/${params.id}`),
       },
     ],
   },

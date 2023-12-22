@@ -1,5 +1,7 @@
+import Sidebar from '../components/Sidebar';
+import SingleBlogItem from '../components/SingleBlogItem';
+import Pagination from '../components/Pagination';
 import blog1 from '/images/blog1.webp';
-import SingleBlogItem from './SingleBlogItem';
 
 const data = [
   {
@@ -36,14 +38,25 @@ const data = [
   },
 ];
 
-const HomeBlogs = () => {
+const AllBlogs = () => {
   return (
-    <div className="w-full md:w-2/3">
-      {data?.map((item, i) => (
-        <SingleBlogItem key={i} item={item} />
-      ))}
+    <div className="container px-4 mx-auto my-6 md:my-20">
+      {/* blogs */}
+      <div className="flex gap-x-5">
+        <Sidebar />
+
+        <div>
+          {data?.map((item, i) => (
+            <SingleBlogItem key={i} item={item} />
+          ))}
+
+          <div className="mt-8">
+            <Pagination />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default HomeBlogs;
+export default AllBlogs;

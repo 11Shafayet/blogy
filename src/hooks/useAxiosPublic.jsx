@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosPublic = axios.create({
-  baseURL: 'https://saimums-backend.vercel.app',
+  baseURL: 'http://localhost:11011',
 });
 
 const useAxiosPublic = () => {
