@@ -1,77 +1,77 @@
-import { createBrowserRouter } from 'react-router-dom';
-import MainLayout from '../MainLayout/MainLayout';
+import { createBrowserRouter } from "react-router-dom";
+import MainLayout from "../MainLayout/MainLayout";
 
-import Home from '../pages/Home';
-import AllBlog from '../pages/AllBlog';
-import SingleBlog from '../pages/SingleBlog';
-import Contact from '../pages/Contact';
+import Home from "../pages/Home";
+import AllBlogs from "../pages/AllBlogs";
+import SingleBlog from "../pages/SingleBlog";
+import Contact from "../pages/Contact";
 
 // admin routes
-import Dashboard from '../admin/pages/Dashboard';
-import Login from '../admin/pages/Login';
-import Register from '../admin/pages/Register';
+import Dashboard from "../admin/pages/Dashboard";
+import Login from "../admin/pages/Login";
+import Register from "../admin/pages/Register";
 
 // blog routes
-import AllBlogs from '../admin/pages/AllBlogs';
-import AddBlog from '../admin/pages/AddBlog';
-import EditBlog from '../admin/pages/EditBlog';
-import UserDetails from '../admin/pages/UserDetails';
+import AdminAllBlogs from "../admin/pages/AllBlogs";
+import AddBlog from "../admin/pages/AddBlog";
+import EditBlog from "../admin/pages/EditBlog";
+import UserDetails from "../admin/pages/UserDetails";
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <MainLayout />,
     children: [
       {
-        path: '/',
+        path: "/",
         element: <Home />,
       },
 
       {
-        path: '/allblog',
-        element: <AllBlog />,
+        path: "/allblogs",
+        element: <AllBlogs />,
       },
       {
-        path: '/blog/:id',
+        path: "/blog/:id",
         element: <SingleBlog />,
         loader: ({ params }) =>
           fetch(`https://check.vercel.app/api/v1/allblogs/${params.id}`),
       },
       {
-        path: '/contact',
+        path: "/contact",
         element: <Contact />,
       },
     ],
   },
   // admin routes
   {
-    path: '/dashboard',
+    path: "/dashboard",
     element: <Dashboard />,
     children: [
       {
-        path: '/dashboard/login',
+        path: "/dashboard/login",
         element: <Login />,
       },
       {
-        path: '/dashboard/register',
+        path: "/dashboard/register",
         element: <Register />,
       },
       {
-        path: '/dashboard/user-details',
+        path: "/dashboard/user-details",
         element: <UserDetails />,
       },
 
       //blog routes
       {
-        path: '/dashboard/all-blogs',
-        element: <AllBlogs />,
+        path: "/dashboard/all-blogs",
+        element: <AdminAllBlogs />,
       },
       {
-        path: '/dashboard/add-blog',
+        path: "/dashboard/add-blog",
         element: <AddBlog />,
       },
       {
-        path: '/dashboard/edit-blog/:id',
+        path: "/dashboard/edit-blog/:id",
         element: <EditBlog />,
         loader: ({ params }) =>
           fetch(
