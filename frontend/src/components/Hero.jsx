@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import { FaCalendarAlt, FaComment } from 'react-icons/fa';
-import heroOne from '/images/hero1.webp';
+import hero1 from '/images/hero1.webp';
+import hero2 from '/images/hero5.jpg';
+import hero3 from '/images/hero3.jpg';
+import hero4 from '/images/hero4.jpg';
+import hero5 from '/images/hero2.jpg';
+import hero6 from '/images/hero6.jpg';
 import Loader from './Loader';
 
 // Import Swiper styles
@@ -12,64 +17,48 @@ import { Autoplay, EffectCoverflow } from 'swiper/modules';
 
 const data = [
   {
-    img: heroOne,
-    category: 'Gadget',
+    img: hero1,
+    category: 'gadget',
     title: 'New Protect: 2nd gen smoke + CO Alarm',
     desc: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam magnam dolorem culpa voluptate qui nam, delectus,',
     date: 'March 14, 2018',
     commentCount: '05',
   },
   {
-    img: heroOne,
-    category: 'Gadget',
+    img: hero2,
+    category: 'travel',
     title: 'New Protect: 2nd gen smoke + CO Alarm',
     desc: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam magnam dolorem culpa voluptate qui nam, delectus,',
     date: 'March 14, 2018',
     commentCount: '05',
   },
   {
-    img: heroOne,
-    category: 'Gadget',
+    img: hero3,
+    category: 'technology',
     title: 'New Protect: 2nd gen smoke + CO Alarm',
     desc: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam magnam dolorem culpa voluptate qui nam, delectus,',
     date: 'March 14, 2018',
     commentCount: '05',
   },
   {
-    img: heroOne,
-    category: 'Gadget',
+    img: hero4,
+    category: 'gadget',
     title: 'New Protect: 2nd gen smoke + CO Alarm',
     desc: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam magnam dolorem culpa voluptate qui nam, delectus,',
     date: 'March 14, 2018',
     commentCount: '05',
   },
   {
-    img: heroOne,
-    category: 'Gadget',
+    img: hero5,
+    category: 'travel',
     title: 'New Protect: 2nd gen smoke + CO Alarm',
     desc: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam magnam dolorem culpa voluptate qui nam, delectus,',
     date: 'March 14, 2018',
     commentCount: '05',
   },
   {
-    img: heroOne,
-    category: 'Gadget',
-    title: 'New Protect: 2nd gen smoke + CO Alarm',
-    desc: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam magnam dolorem culpa voluptate qui nam, delectus,',
-    date: 'March 14, 2018',
-    commentCount: '05',
-  },
-  {
-    img: heroOne,
-    category: 'Gadget',
-    title: 'New Protect: 2nd gen smoke + CO Alarm',
-    desc: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam magnam dolorem culpa voluptate qui nam, delectus,',
-    date: 'March 14, 2018',
-    commentCount: '05',
-  },
-  {
-    img: heroOne,
-    category: 'Gadget',
+    img: hero6,
+    category: 'technology',
     title: 'New Protect: 2nd gen smoke + CO Alarm',
     desc: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam magnam dolorem culpa voluptate qui nam, delectus,',
     date: 'March 14, 2018',
@@ -95,6 +84,9 @@ export const Hero = () => {
                 centeredSlides={false}
                 spaceBetween={0}
                 breakpoints={{
+                  360: {
+                    slidesPerView: 1,
+                  },
                   640: {
                     slidesPerView: 2,
                   },
@@ -119,7 +111,7 @@ export const Hero = () => {
                       <div className="absolute top-0 left-0 right-0 bottom-0 bg-gray-600 bg-opacity-35 -z-10" />
                       <div className="h-full flex flex-col justify-end text-start">
                         <div>
-                          <span className="px-6 py-2 text-sm border border-primary rounded-full">
+                          <span className="px-6 py-2 text-sm border border-primary rounded-full capitalize">
                             {item.category}
                           </span>
                           <h2 className="capitalize text-2xl font-bold hover:text-primary duration-500 my-4">

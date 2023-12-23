@@ -9,7 +9,6 @@ import Contact from '../pages/Contact';
 // admin routes
 import Dashboard from '../admin/pages/Dashboard';
 import Login from '../admin/pages/Login';
-import Register from '../admin/pages/Register';
 
 // blog routes
 import AdminAllBlogs from '../admin/pages/AllBlogs';
@@ -50,10 +49,7 @@ const router = createBrowserRouter([
         path: '/dashboard/login',
         element: <Login />,
       },
-      {
-        path: '/dashboard/register',
-        element: <Register />,
-      },
+
       {
         path: '/dashboard/user-details',
         element: <UserDetails />,
@@ -61,7 +57,7 @@ const router = createBrowserRouter([
 
       //blog routes
       {
-        path: '/dashboard/all-blogs',
+        path: '/dashboard',
         element: <AdminAllBlogs />,
       },
       {
