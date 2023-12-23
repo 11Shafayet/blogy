@@ -1,5 +1,5 @@
 import logo from '/images/logo.png';
-import { FaSearch } from 'react-icons/fa';
+import { FaUser } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 
@@ -51,8 +51,8 @@ const Navbar = () => {
               ))}
             </ul>
             <div>
-              <div>
-                <FaSearch />
+              <div className="p-3 bg-gray-100 rounded-full">
+                <FaUser />
               </div>
             </div>
           </div>
