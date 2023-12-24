@@ -5,10 +5,10 @@ import Home from '../pages/Home';
 import AllBlogs from '../pages/AllBlogs';
 import SingleBlog from '../pages/SingleBlog';
 import Contact from '../pages/Contact';
+import LogAndReg from '../pages/LogAndReg';
 
 // admin routes
 import Dashboard from '../admin/pages/Dashboard';
-import Login from '../admin/pages/Login';
 
 // blog routes
 import AdminAllBlogs from '../admin/pages/AllBlogs';
@@ -25,7 +25,10 @@ const router = createBrowserRouter([
         path: '/',
         element: <Home />,
       },
-
+      {
+        path: '/login',
+        element: <LogAndReg />,
+      },
       {
         path: '/allblogs',
         element: <AllBlogs />,
@@ -45,11 +48,6 @@ const router = createBrowserRouter([
     path: '/dashboard',
     element: <Dashboard />,
     children: [
-      {
-        path: '/dashboard/login',
-        element: <Login />,
-      },
-
       {
         path: '/dashboard/user-details',
         element: <UserDetails />,
