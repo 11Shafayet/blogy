@@ -27,21 +27,7 @@ async function run() {
 
     const userCollection = client.db('blogy').collection('users');
 
-    app.get('/');
-
     app.use('/user', userRoutes(userCollection));
-
-    // app.post('/user', async (req, res) => {
-    //   const data = req.body;
-    //   const result = await userCollection.insertOne(data);
-    //   res.send(result);
-    // });
-
-    // app.get('/user', async (req, res) => {
-    //   const data = req.body;
-    //   const result = await userCollection.find(data).toArray();
-    //   res.send(result);
-    // });
 
     console.log(
       'Pinged your deployment. You successfully connected to MongoDB!'
