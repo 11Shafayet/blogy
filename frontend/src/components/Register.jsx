@@ -1,20 +1,24 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import useAuth from '../hooks/useAuth';
 
 const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [conPassword, setConPassword] = useState('');
-  const [image, setImage] = useState();
+  const [pic, setPic] = useState();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConPassword, setShowConPassword] = useState(false);
   const navigate = useNavigate();
+  const { user, setUser } = useAuth();
+
+  useEffect(() => {}, [user]);
 
   const postDetails = (pic) => {
     setLoading(true);
@@ -24,12 +28,14 @@ const Register = () => {
       return;
     }
 
-    console.log(pic);
-
-    if (pic.type === 'image/jpeg' || pic.type === 'image/png') {
+    if (
+      pic.type === 'image/jpeg' ||
+      pic.type === 'image/png' ||
+      pic.type === 'image/jpg'
+    ) {
       const data = new FormData();
       data.append('file', pic);
-      data.append('upload_preset', 'chit chat app');
+      data.append('upload_preset', 'blogy app');
       data.append('cloud_name', 'djlghivmg');
       fetch('https://api.cloudinary.com/v1_1/djlghivmg/image/upload', {
         method: 'post',
@@ -37,8 +43,9 @@ const Register = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          setImage(data.url.toString());
-          console.log(data.url.toString());
+          console.log(data);
+          setPic(data.url.toString());
+          console.log(pic);
           setLoading(false);
         })
         .catch((err) => {
@@ -46,7 +53,7 @@ const Register = () => {
           setLoading(false);
         });
     } else {
-      toast.error('Please upload a jpeg or png image!');
+      toast.error('Please upload a jpeg, jpg or png image!');
       setLoading(false);
       return;
     }
@@ -74,22 +81,20 @@ const Register = () => {
           };
 
           const { data } = await axios.post(
-            'http://localhost:5000/api/user',
+            'http://localhost:5000/user',
             {
               name,
               email,
               password,
-              image,
+              pic,
             },
             config
           );
-
-          console.log(data);
-
+          setUser(data);
           localStorage.setItem('userInfo', JSON.stringify(data));
           toast.success('User Created successfully!');
           setLoading(false);
-          navigate('/chat');
+          navigate('/');
         } catch (error) {
           toast.warning('Failed To Create User!');
           setLoading(false);
@@ -171,6 +176,7 @@ const Register = () => {
         <input
           type="file"
           accept="image/*"
+          required
           onChange={(e) => postDetails(e.target.files[0])}
         />
         <button

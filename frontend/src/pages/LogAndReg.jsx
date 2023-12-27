@@ -1,10 +1,10 @@
-import { useState } from 'react';
 import Tab from '../components/Tab';
 import Login from '../components/Login';
 import Register from '../components/Register';
+import useAuth from '../hooks/useAuth';
 
 const HomePage = () => {
-  const [activeTab, setActiveTab] = useState(true);
+  const { activeTab, setActiveTab } = useAuth();
 
   return (
     <section className="bg-gradient-to-r from-cyan-500 to-blue-500 min-h-screen flex justify-center items-center">

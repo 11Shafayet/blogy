@@ -4,12 +4,15 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import useAuth from '../hooks/useAuth';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { setUser } = useAuth();
+
   const navigate = useNavigate();
 
   const handleLoginSubmit = async (e) => {
@@ -25,18 +28,18 @@ const Login = () => {
         };
 
         const { data } = await axios.post(
-          'http://localhost:5000/api/user/login',
+          'http://localhost:5000/user/login',
           {
             email,
             password,
           },
           config
         );
-
+        setUser(data);
         localStorage.setItem('userInfo', JSON.stringify(data));
         toast.success('Login Successful!');
         setLoading(false);
-        navigate('/chat');
+        navigate('/');
       } catch (error) {
         toast.warning('Failed To Log in!');
         setLoading(false);

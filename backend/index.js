@@ -5,6 +5,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 const userRoutes = require('./routes/userRoutes');
+const postRoutes = require('./routes/postRoutes');
 
 app.use(cors());
 app.use(express.json());
@@ -26,8 +27,10 @@ async function run() {
     await client.db('admin').command({ ping: 1 });
 
     const userCollection = client.db('blogy').collection('users');
+    const postCollection = client.db('blogy').collection('posts');
 
     app.use('/user', userRoutes(userCollection));
+    app.use('/post', postRoutes(postCollection));
 
     console.log(
       'Pinged your deployment. You successfully connected to MongoDB!'

@@ -13,8 +13,7 @@ import Dashboard from '../admin/pages/Dashboard';
 // blog routes
 import AdminAllBlogs from '../admin/pages/AllBlogs';
 import AddBlog from '../admin/pages/AddBlog';
-import EditBlog from '../admin/pages/EditBlog';
-import UserDetails from '../admin/pages/UserDetails';
+import UserDashboard from '../admin/pages/UserDashboard';
 
 const router = createBrowserRouter([
   {
@@ -49,12 +48,6 @@ const router = createBrowserRouter([
     element: <Dashboard />,
     children: [
       {
-        path: '/dashboard/user-details',
-        element: <UserDetails />,
-      },
-
-      //blog routes
-      {
         path: '/dashboard',
         element: <AdminAllBlogs />,
       },
@@ -63,10 +56,8 @@ const router = createBrowserRouter([
         element: <AddBlog />,
       },
       {
-        path: '/dashboard/edit-blog/:id',
-        element: <EditBlog />,
-        loader: ({ params }) =>
-          fetch(`http://localhost:11011/api/${params.id}`),
+        path: '/dashboard/:id',
+        element: <UserDashboard />,
       },
     ],
   },

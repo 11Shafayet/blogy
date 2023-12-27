@@ -6,27 +6,26 @@ import { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 import { ToastContainer, toast } from 'react-toastify';
 
-const AllBlogs = () => {
+const UserDashboard = () => {
   const [loading, setLoading] = useState(false);
-  const [adminId, setAdminId] = useState();
+  const [userId, setUserId] = useState();
   const { user } = useAuth();
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
-  const [roles, setRoles] = useState([]);
 
   useEffect(() => {
     const loggedInUser = JSON.parse(localStorage.getItem('userInfo'));
-    setAdminId(loggedInUser?._id);
+    setUserId(loggedInUser?._id);
   }, [user]);
 
   const fetchData = async () => {
-    if (!adminId) {
-      return; // Skip the request if adminId is undefined
+    if (!userId) {
+      return; // Skip the request if userId is undefined
     }
     setLoading(true);
 
     try {
-      const response = await axios.get(`http://localhost:5000/user/${adminId}`);
+      const response = await axios.get(`http://localhost:5000/post/${userId}`);
 
       const data = response.data;
       setData(data);
@@ -40,7 +39,7 @@ const AllBlogs = () => {
 
   useEffect(() => {
     fetchData();
-  }, [adminId]);
+  }, [userId]);
 
   const handleDelete = async (userId) => {
     try {
@@ -48,74 +47,48 @@ const AllBlogs = () => {
         `http://localhost:5000/user/${userId}`
       );
 
+      toast.success('Post Deleted Successfully!');
       console.log(response);
     } catch (error) {
       console.error('Axios error', error);
+      toast.success('Failed to delete post!');
       setError(error);
     } finally {
       setLoading(false);
       fetchData();
     }
   };
-
-  const handleUpdate = async (e, userId, index) => {
-    e.preventDefault();
-    const updatedRole = roles[index];
-
-    try {
-      setLoading(true);
-
-      const response = await axios.patch(`http://localhost:5000/user`, {
-        userId,
-        updatedRole,
-      });
-      if (response) {
-        toast.success('Role edited successfully!');
-      } else {
-        toast.success('Faile to update role!');
-      }
-    } catch (error) {
-      console.error('Axios error', error);
-      setError(error);
-    } finally {
-      setLoading(false);
-      fetchData();
-    }
-
-    console.log(updatedRole, userId);
-  };
-  useEffect(() => {
-    // Initialize the roles array with the initial roles from data
-    if (data) {
-      const initialRoles = data.map((item) => item.role);
-      setRoles(initialRoles);
-    }
-  }, [data]);
 
   return (
     <div className="my-12 overflow-x-auto h-[700px] md:h-auto">
       <div className="container px-4 mx-auto">
-        <h2 className="text-center font-bold text-3xl md:text-5xl mb-12">
-          Manage Users
-        </h2>
+        <div className="flex items-center justify-between gap-x-4 mb-12">
+          <h2 className="text-center font-bold text-3xl md:text-5xl ">
+            Manage Posts
+          </h2>
+
+          <button className='font-bold bg-primary text-white py-3 px-6 rounded-lg hover:bg-opacity-90 hover:translate-y-1 duration-500'>Add New Post</button>
+        </div>
         {loading ? (
           <Loader />
         ) : (
           <>
             {data?.length === 0 ? (
-              <p className="text-center text-xl font-semibold">No Data Found</p>
+              <p className="text-center text-xl font-semibold">
+                No Data Found!
+              </p>
             ) : (
               <Table striped className="relative">
                 <Table.Head>
                   <Table.HeadCell className="text-start">
                     Thumbnail
                   </Table.HeadCell>
-                  <Table.HeadCell className="text-start">Name</Table.HeadCell>
-                  <Table.HeadCell className="text-start">Email</Table.HeadCell>
-                  <Table.HeadCell className="text-start">Role</Table.HeadCell>
-
+                  <Table.HeadCell className="text-start">Title</Table.HeadCell>
                   <Table.HeadCell className="text-start">
-                    Edit Role
+                    Description
+                  </Table.HeadCell>
+                  <Table.HeadCell className="text-start">
+                    Edit Post
                   </Table.HeadCell>
                   <Table.HeadCell className="text-start">Delete</Table.HeadCell>
                 </Table.Head>
@@ -129,44 +102,20 @@ const AllBlogs = () => {
                     >
                       <Table.Cell>
                         <img
-                          src={item.pic}
+                          src={item?.pic}
                           alt=""
-                          className="w-16 h-16 object-cover rounded-full"
+                          className="w-28 h-16 object-cover "
                         />
                       </Table.Cell>
                       <Table.Cell className="whitespace-wrap font-bold text-gray-900 ">
-                        {item.name}
+                        {item?.title}
                       </Table.Cell>
-                      <Table.Cell>{item.email}</Table.Cell>
-                      <Table.Cell>{item.role}</Table.Cell>
+                      <Table.Cell>{item?.desc}</Table.Cell>
                       <Table.Cell>
-                        <form
-                          action=""
-                          onSubmit={(e) => handleUpdate(e, item._id, i)}
-                        >
-                          <select
-                            name="role"
-                            id="role"
-                            value={roles[i]}
-                            onChange={(e) => {
-                              const updatedRoles = [...roles];
-                              updatedRoles[i] = e.target.value;
-                              setRoles(updatedRoles);
-                            }}
-                            className="bg-white p-2.5 px-4 font-semibold"
-                            required
-                          >
-                            <option value="pending">Pending</option>
-                            <option value="user">User</option>
-                            <option value="admin">Admin</option>
-                          </select>
-                          <button type="submit">
-                            <FaEdit
-                              size={20}
-                              className="text-teal-500 cursor-pointer ml-3"
-                            />
-                          </button>
-                        </form>
+                        <FaEdit
+                          size={20}
+                          className="text-teal-500 cursor-pointer ml-3"
+                        />
                       </Table.Cell>
                       <Table.Cell>
                         <FaTrash
@@ -198,4 +147,4 @@ const AllBlogs = () => {
   );
 };
 
-export default AllBlogs;
+export default UserDashboard;
