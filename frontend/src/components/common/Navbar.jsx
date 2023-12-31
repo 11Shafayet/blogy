@@ -1,18 +1,22 @@
-import logo from '/images/logo.png';
-import { Link } from 'react-router-dom';
-import useAuth from '../hooks/useAuth';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
+import logo from '/images/logo.png';
 
 const Navbar = () => {
-  const { activeNav, setActiveNav, activeTab, setActiveTab, user, setUser } =
-    useAuth();
+  const { activeNav, setActiveNav } = useAuth();
+  const [isUser, setIsUser] = useState(null);
   const [activeProfile, setActiveProfile] = useState(false);
 
-  useEffect(() => {}, [user]);
+  useEffect(() => {
+    const userExists = JSON.parse(localStorage.getItem('userInfo'));
+
+    setIsUser(userExists);
+  }, []);
 
   const logoutHandler = () => {
     localStorage.removeItem('userInfo');
-    setUser(null);
+    setIsUser(null);
   };
 
   const navData = [
@@ -26,11 +30,11 @@ const Navbar = () => {
       text: 'allblogs',
       link: '/allblogs',
     },
-    {
-      title: 'Featured',
-      text: 'featured',
-      link: '/allblogs',
-    },
+    // {
+    //   title: 'Featured',
+    //   text: 'featured',
+    //   link: '/allblogs',
+    // },
     {
       title: 'Contact',
       text: 'contact',
@@ -62,32 +66,26 @@ const Navbar = () => {
               ))}
             </ul>
             <div className="flex items-center">
-              {!user ? (
+              {!isUser ? (
                 <>
                   <Link
                     to="/login"
                     className={`uppercase hover:bg-black hover:bg-opacity-15 py-4 px-5 duration-500 cursor-pointer ${
-                      activeNav === 'login' &&
-                      activeTab &&
-                      'bg-black bg-opacity-15'
+                      activeNav === 'login' && 'bg-black bg-opacity-15'
                     }`}
                     onClick={() => {
                       setActiveNav('login');
-                      setActiveTab(true);
                     }}
                   >
                     Login
                   </Link>
                   <Link
-                    to="/login"
+                    to="/register"
                     className={`uppercase hover:bg-black hover:bg-opacity-15 py-4 px-5 duration-500 cursor-pointer ${
-                      activeNav === 'register' &&
-                      !activeTab &&
-                      'bg-black bg-opacity-15'
+                      activeNav === 'register' && 'bg-black bg-opacity-15'
                     }`}
                     onClick={() => {
                       setActiveNav('register');
-                      setActiveTab(false);
                     }}
                   >
                     Register
@@ -99,16 +97,22 @@ const Navbar = () => {
                   onClick={() => setActiveProfile((prev) => !prev)}
                 >
                   <img
-                    src={user?.pic}
+                    src={isUser?.pic}
                     alt=""
                     className="w-11 h-11 rounded-full"
                   />
                   {activeProfile && (
-                    <div
-                      className="absolute bg-white text-black top-full right-0 rounded-md z-[100]"
-                      onClick={logoutHandler}
-                    >
-                      <h4 className="uppercase hover:bg-black hover:bg-opacity-15 py-4 px-5 duration-500 font-bold cursor-pointer">
+                    <div className="absolute bg-white text-black top-full right-0 rounded-md z-[100] pt-4 shadow">
+                      <Link
+                        to={`/dashboard`}
+                        className="uppercase hover:bg-black hover:bg-opacity-15 py-4 px-5 duration-500 font-bold cursor-pointer"
+                      >
+                        Dashboard
+                      </Link>
+                      <h4
+                        className="uppercase hover:bg-black hover:bg-opacity-15 py-4 px-5 duration-500 font-bold cursor-pointer"
+                        onClick={logoutHandler}
+                      >
                         Logout
                       </h4>
                     </div>

@@ -3,17 +3,17 @@ import MainLayout from '../MainLayout/MainLayout';
 
 import Home from '../pages/Home';
 import AllBlogs from '../pages/AllBlogs';
-import SingleBlog from '../pages/SingleBlog';
 import Contact from '../pages/Contact';
-import LogAndReg from '../pages/LogAndReg';
+import Login from '../pages/Login';
+import Register from '../pages/Register';
 
 // admin routes
-import Dashboard from '../admin/pages/Dashboard';
-
-// blog routes
-import AdminAllBlogs from '../admin/pages/AllBlogs';
+import AdminLayout from '../MainLayout/AdminLayout';
+import MyBlogs from '../admin/pages/MyBlogs';
 import AddBlog from '../admin/pages/AddBlog';
-import UserDashboard from '../admin/pages/UserDashboard';
+import AllUsers from '../admin/pages/AllUsers';
+import PrivateRoute from './PrivateRoute';
+import EditBlog from '../admin/pages/EditBlog';
 
 const router = createBrowserRouter([
   {
@@ -26,15 +26,15 @@ const router = createBrowserRouter([
       },
       {
         path: '/login',
-        element: <LogAndReg />,
+        element: <Login />,
+      },
+      {
+        path: '/register',
+        element: <Register />,
       },
       {
         path: '/allblogs',
         element: <AllBlogs />,
-      },
-      {
-        path: '/blog/:id',
-        element: <SingleBlog />,
       },
       {
         path: '/contact',
@@ -45,19 +45,39 @@ const router = createBrowserRouter([
   // admin routes
   {
     path: '/dashboard',
-    element: <Dashboard />,
+    element: <AdminLayout />,
     children: [
       {
         path: '/dashboard',
-        element: <AdminAllBlogs />,
+        element: (
+          <PrivateRoute>
+            <MyBlogs />
+          </PrivateRoute>
+        ),
       },
       {
         path: '/dashboard/add-blog',
-        element: <AddBlog />,
+        element: (
+          <PrivateRoute>
+            <AddBlog />
+          </PrivateRoute>
+        ),
       },
       {
-        path: '/dashboard/:id',
-        element: <UserDashboard />,
+        path: '/dashboard/edit-blog/:id',
+        element: (
+          <PrivateRoute>
+            <EditBlog />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: '/dashboard/all-users',
+        element: (
+          <PrivateRoute>
+            <AllUsers />
+          </PrivateRoute>
+        ),
       },
     ],
   },

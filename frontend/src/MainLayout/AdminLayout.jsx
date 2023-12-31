@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+import Navbar from '../admin/components/Navbar';
 
-const Dashboard = () => {
+const AdminLayout = () => {
   return (
     <>
       <Navbar />
@@ -10,4 +10,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default AdminLayout;

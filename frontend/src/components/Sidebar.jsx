@@ -1,5 +1,6 @@
+import AuthorInfo from './AuthorInfo';
 import SearchBar from './SearchBar';
-import PostCategories from './PostCategories';
+// import PostCategories from './PostCategories';
 
 const Sidebar = () => {
   return (
@@ -9,7 +10,8 @@ const Sidebar = () => {
 
         <hr className="my-8 md:my-12" />
 
-        <PostCategories />
+        <AuthorInfo />
+        {/* <PostCategories /> */}
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import Sidebar from '../components/Sidebar';
 import SingleBlogItem from '../components/SingleBlogItem';
-import Pagination from '../components/Pagination';
+// import Pagination from '../components/Pagination';
 import blog1 from '/images/blog1.webp';
 
 const data = [
@@ -50,9 +50,7 @@ const AllBlogs = () => {
             <SingleBlogItem key={i} item={item} />
           ))}
 
-          <div className="mt-8">
-            <Pagination />
-          </div>
+          <div className="mt-8">{/* <Pagination /> */}</div>
         </div>
       </div>
     </div>

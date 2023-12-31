@@ -1,63 +1,48 @@
 import { Table } from 'flowbite-react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import Loader from '../../components/Loader';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import useAuth from '../../hooks/useAuth';
 import { ToastContainer, toast } from 'react-toastify';
+import Loader from '../../components/common/Loader';
+import { useQuery } from '@tanstack/react-query';
 
-const AllBlogs = () => {
-  const [loading, setLoading] = useState(false);
-  const [adminId, setAdminId] = useState();
-  const { user } = useAuth();
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
+const UsersTable = () => {
+  const [user, setUser] = useState();
   const [roles, setRoles] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const loggedInUser = JSON.parse(localStorage.getItem('userInfo'));
-    setAdminId(loggedInUser?._id);
-  }, [user]);
+    setUser(loggedInUser);
+  }, []);
 
-  const fetchData = async () => {
-    if (!adminId) {
-      return; // Skip the request if adminId is undefined
-    }
-    setLoading(true);
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ['user'],
+    queryFn: async () => {
+      const res = await axios.get(`http://localhost:5000/user/${user?._id}`);
+      return res.data;
+    },
+    enabled: !!user,
+  });
 
-    try {
-      const response = await axios.get(`http://localhost:5000/user/${adminId}`);
-
-      const data = response.data;
-      setData(data);
-    } catch (error) {
-      console.error('Axios error', error);
-      setError(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [adminId]);
-
+  // delete
   const handleDelete = async (userId) => {
     try {
       const response = await axios.delete(
         `http://localhost:5000/user/${userId}`
       );
 
+      toast.success('User Deleted Successfully!');
       console.log(response);
     } catch (error) {
       console.error('Axios error', error);
-      setError(error);
+      toast.success('Failed to delete user!');
     } finally {
-      setLoading(false);
-      fetchData();
+      refetch();
     }
   };
 
+  //update role
   const handleUpdate = async (e, userId, index) => {
     e.preventDefault();
     const updatedRole = roles[index];
@@ -72,14 +57,13 @@ const AllBlogs = () => {
       if (response) {
         toast.success('Role edited successfully!');
       } else {
-        toast.success('Faile to update role!');
+        toast.success('Failed to update role!');
       }
     } catch (error) {
       console.error('Axios error', error);
-      setError(error);
     } finally {
       setLoading(false);
-      fetchData();
+      refetch();
     }
 
     console.log(updatedRole, userId);
@@ -95,28 +79,30 @@ const AllBlogs = () => {
   return (
     <div className="my-12 overflow-x-auto h-[700px] md:h-auto">
       <div className="container px-4 mx-auto">
-        <h2 className="text-center font-bold text-3xl md:text-5xl mb-12">
-          Manage Users
-        </h2>
-        {loading ? (
+        <div className="flex items-center justify-between gap-x-4 mb-12">
+          <h2 className="text-center font-bold text-3xl md:text-5xl ">
+            Manage Users
+          </h2>
+        </div>
+
+        {isLoading ? (
           <Loader />
         ) : (
           <>
             {data?.length === 0 ? (
-              <p className="text-center text-xl font-semibold">No Data Found</p>
+              <p className="text-center text-xl font-semibold">
+                No User Found!
+              </p>
             ) : (
               <Table striped className="relative">
                 <Table.Head>
                   <Table.HeadCell className="text-start">
-                    Thumbnail
+                    Picture
                   </Table.HeadCell>
                   <Table.HeadCell className="text-start">Name</Table.HeadCell>
                   <Table.HeadCell className="text-start">Email</Table.HeadCell>
                   <Table.HeadCell className="text-start">Role</Table.HeadCell>
-
-                  <Table.HeadCell className="text-start">
-                    Edit Role
-                  </Table.HeadCell>
+                  <Table.HeadCell className="text-start">Edit</Table.HeadCell>
                   <Table.HeadCell className="text-start">Delete</Table.HeadCell>
                 </Table.Head>
                 <Table.Body className="divide-y">
@@ -129,16 +115,17 @@ const AllBlogs = () => {
                     >
                       <Table.Cell>
                         <img
-                          src={item.pic}
+                          src={item?.pic}
                           alt=""
-                          className="w-16 h-16 object-cover rounded-full"
+                          className="w-14 h-14 object-cover rounded-full"
                         />
                       </Table.Cell>
                       <Table.Cell className="whitespace-wrap font-bold text-gray-900 ">
-                        {item.name}
+                        {item?.name}
                       </Table.Cell>
-                      <Table.Cell>{item.email}</Table.Cell>
-                      <Table.Cell>{item.role}</Table.Cell>
+                      <Table.Cell>{item?.email}</Table.Cell>
+                      <Table.Cell>{item?.role}</Table.Cell>
+
                       <Table.Cell>
                         <form
                           action=""
@@ -161,13 +148,18 @@ const AllBlogs = () => {
                             <option value="admin">Admin</option>
                           </select>
                           <button type="submit">
-                            <FaEdit
-                              size={20}
-                              className="text-teal-500 cursor-pointer ml-3"
-                            />
+                            {!loading ? (
+                              <FaEdit
+                                size={20}
+                                className="text-teal-500 cursor-pointer ml-3"
+                              />
+                            ) : (
+                              <Loader type="sync" size={11} />
+                            )}
                           </button>
                         </form>
                       </Table.Cell>
+
                       <Table.Cell>
                         <FaTrash
                           className="text-red-500 cursor-pointer"
@@ -198,4 +190,4 @@ const AllBlogs = () => {
   );
 };
 
-export default AllBlogs;
+export default UsersTable;

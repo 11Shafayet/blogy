@@ -16,10 +16,10 @@ const HomeSidebar = () => {
         <hr className="my-8 md:my-12" />
 
         <PopularPosts />
-
+        {/* 
         <hr className="my-8 md:my-12" />
 
-        <PostCategories />
+        <PostCategories /> */}
       </div>
     </div>
   );

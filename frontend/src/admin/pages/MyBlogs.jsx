@@ -1,50 +1,35 @@
 import { Table } from 'flowbite-react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import Loader from '../../components/Loader';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import useAuth from '../../hooks/useAuth';
 import { ToastContainer, toast } from 'react-toastify';
+import Loader from '../../components/common/Loader';
+import { useQuery } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
 
-const UserDashboard = () => {
-  const [loading, setLoading] = useState(false);
-  const [userId, setUserId] = useState();
-  const { user } = useAuth();
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
+const MyBlogs = () => {
+  const [user, setUser] = useState();
 
   useEffect(() => {
     const loggedInUser = JSON.parse(localStorage.getItem('userInfo'));
-    setUserId(loggedInUser?._id);
-  }, [user]);
+    setUser(loggedInUser);
+  }, []);
 
-  const fetchData = async () => {
-    if (!userId) {
-      return; // Skip the request if userId is undefined
-    }
-    setLoading(true);
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ['post'],
+    queryFn: async () => {
+      const res = await axios.get(`http://localhost:5000/post/${user._id}`);
+      // setPosts(res.data);
+      return res.data;
+    },
+    enabled: !!user,
+  });
 
-    try {
-      const response = await axios.get(`http://localhost:5000/post/${userId}`);
-
-      const data = response.data;
-      setData(data);
-    } catch (error) {
-      console.error('Axios error', error);
-      setError(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [userId]);
-
-  const handleDelete = async (userId) => {
+  // delete
+  const handleDelete = async (postId) => {
     try {
       const response = await axios.delete(
-        `http://localhost:5000/user/${userId}`
+        `http://localhost:5000/post/${postId}`
       );
 
       toast.success('Post Deleted Successfully!');
@@ -52,10 +37,8 @@ const UserDashboard = () => {
     } catch (error) {
       console.error('Axios error', error);
       toast.success('Failed to delete post!');
-      setError(error);
     } finally {
-      setLoading(false);
-      fetchData();
+      refetch();
     }
   };
 
@@ -67,9 +50,15 @@ const UserDashboard = () => {
             Manage Posts
           </h2>
 
-          <button className='font-bold bg-primary text-white py-3 px-6 rounded-lg hover:bg-opacity-90 hover:translate-y-1 duration-500'>Add New Post</button>
+          <Link
+            to="/dashboard/add-blog"
+            className="font-bold bg-primary text-white py-3 px-6 rounded-lg hover:bg-opacity-90 hover:translate-y-1 duration-500"
+          >
+            Add New Post
+          </Link>
         </div>
-        {loading ? (
+
+        {isLoading ? (
           <Loader />
         ) : (
           <>
@@ -112,10 +101,12 @@ const UserDashboard = () => {
                       </Table.Cell>
                       <Table.Cell>{item?.desc}</Table.Cell>
                       <Table.Cell>
-                        <FaEdit
-                          size={20}
-                          className="text-teal-500 cursor-pointer ml-3"
-                        />
+                        <Link to={`/dashboard/edit-blog/${item?._id}`}>
+                          <FaEdit
+                            size={20}
+                            className="text-teal-500 cursor-pointer ml-3"
+                          />
+                        </Link>
                       </Table.Cell>
                       <Table.Cell>
                         <FaTrash
@@ -147,4 +138,4 @@ const UserDashboard = () => {
   );
 };
 
-export default UserDashboard;
+export default MyBlogs;

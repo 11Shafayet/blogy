@@ -6,7 +6,7 @@ import hero3 from '/images/hero3.jpg';
 import hero4 from '/images/hero4.jpg';
 import hero5 from '/images/hero2.jpg';
 import hero6 from '/images/hero6.jpg';
-import Loader from './Loader';
+import Loader from './common/Loader';
 
 // Import Swiper styles
 import { Swiper, SwiperSlide } from 'swiper/react';
